@@ -60,7 +60,7 @@ class HerramientasController extends Controller
 
             return view('regalo',compact('$pare'));
         }else{
-            $participantes = Participante::all();
+            $participantes = Participante::where('id_participante',null)->get();
             return view('amigoi',compact('participantes'));
         }
     }
