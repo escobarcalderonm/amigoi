@@ -220,8 +220,8 @@
 <section class="projects_area p_120">
     <div class="container">
         <div class="main_title">
-            <h2>PARTICIPANTES</h2>
-            <p>Aquí están todos los participantes, SOLO DALE A TU NOMBRE.</p>
+            <h2>TU ELEGIDO</h2>
+            <p>Aquí aparece la persona a la que tienes que regalar</p>
         </div>
         {{--<div class="projects_fillter">--}}
             {{--<ul class="filter list">--}}
@@ -232,19 +232,17 @@
             {{--</ul>--}}
         {{--</div>--}}
         <div class="projects_inner row">
-            @foreach($participantes as $participante)
-                <a href="{{url('amigo/'.$participante->id)}}">
+                <a href="{{url('amigo/'.$pare->id)}}">
                 <div class="col-lg-4 col-sm-6 brand web">
                     <div class="projects_item">
-                        <img class="img-fluid" src="{{asset($participante->foto)}}" alt="">
+                        <img class="img-fluid" src="{{asset($pare->foto)}}" alt="">
                         <div class="projects_text">
-                            <h4>{{$participante->nombre}}</h4>
+                            <h4>{{$pare->nombre}}</h4>
                             {{--<p>Client Project</p>--}}
                         </div>
                     </div>
                 </div>
                 </a>
-                @endforeach
         </div>
     </div>
 </section>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Participante;
 
 class HomeController extends Controller
 {
@@ -18,6 +19,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        return view('amigoi');
+        $participantes = Participante::all();
+        return view('amigoi',compact('participantes'));
     }
 }
