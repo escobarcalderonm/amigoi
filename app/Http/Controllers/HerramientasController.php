@@ -58,7 +58,7 @@ class HerramientasController extends Controller
 
             $pare = Participante::find($select);
 
-            return view('regalo',compact('$pare'));
+            return view('regalo',compact('pare'));
         }else{
             $participantes = Participante::where('id_participante',null)->get();
             return view('amigoi',compact('participantes'));
