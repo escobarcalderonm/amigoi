@@ -233,12 +233,13 @@
         {{--</div>--}}
         <div class="projects_inner row">
             @foreach($participantes as $participante)
-                <a href="{{url('amigo/'.$participante->id)}}">
-                <div class="col-lg-4 col-sm-6 brand web">
+                <!-- Trigger the modal with a button -->
+                    <button id="btn-{{$participante->id}}" style="display: none;" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal{{$participante->id}}">Open Modal</button>
+                <a onclick="$('#btn-{{$participante->id}}').click()"><div class="col-lg-4 col-sm-6 brand web">
                     <div class="projects_item">
                         <img class="img-fluid" src="{{asset($participante->foto)}}" alt="">
                         <div class="projects_text">
-                            <h4>{{$participante->nombre}}</h4>
+                            <h4 style="color: white;">{{$participante->nombre}}</h4>
                             {{--<p>Client Project</p>--}}
                         </div>
                     </div>
@@ -248,6 +249,29 @@
         </div>
     </div>
 </section>
+@foreach($participantes as $participante)
+    <!-- Modal -->
+    <div id="myModal{{$participante->id}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">CUIDADO</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿ESTAS SEGURO DE QUE ERES {{$participante->nombre}}?</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" href="{{url('amigo/'.$participante->id)}}">SI</a>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">NO</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+@endforeach
 <!--================End Projects Area =================-->
 
 <!--================Testimonials Area =================-->
