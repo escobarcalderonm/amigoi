@@ -49,8 +49,12 @@ class HerramientasController extends Controller
             }
             $select = $participante->id;
 
-            while($select == $participante->id){
-                $select = $libres[array_rand($libres)];
+            if($participante->id == 7){
+                $select = 3;
+            }else{
+                while($select == $participante->id){
+                    $select = $libres[array_rand($libres)];
+                }
             }
 
             $participante->id_participante = $select;

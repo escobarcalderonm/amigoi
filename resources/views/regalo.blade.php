@@ -64,26 +64,26 @@
 <!--================Header Menu Area =================-->
 
 <!--================Home Banner Area =================-->
-<section class="home_banner_area">
-    <div class="banner_inner">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="home_left_img">
-                        <img src="{{asset('amigoi/img/banner/home-left-1.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="banner_content">
-                        <h5>Esto es...</h5>
-                        <h2>EL AMIGO INVISIBLE</h2>
-                        <p>A continuación aparecerán los nombres de los participantes, para que te toque alguien tienes que darle A TU NOMBRE para que te aparezca quién te ha tocado.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+{{--<section class="home_banner_area">--}}
+    {{--<div class="banner_inner">--}}
+        {{--<div class="container">--}}
+            {{--<div class="row">--}}
+                {{--<div class="col-lg-6">--}}
+                    {{--<div class="home_left_img">--}}
+                        {{--<img src="{{asset('amigoi/img/banner/home-left-1.png')}}" alt="">--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="col-lg-6">--}}
+                    {{--<div class="banner_content">--}}
+                        {{--<h5>Esto es...</h5>--}}
+                        {{--<h2>EL AMIGO INVISIBLE</h2>--}}
+                        {{--<p>A continuación aparecerán los nombres de los participantes, para que te toque alguien tienes que darle A TU NOMBRE para que te aparezca quién te ha tocado.</p>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+{{--</section>--}}
 <!--================End Home Banner Area =================-->
 
 <!--================Welcome Area =================-->
