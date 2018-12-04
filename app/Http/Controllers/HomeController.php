@@ -19,7 +19,8 @@ class HomeController extends Controller
 
     public function index()
     {
-        $participantes = Participante::where('id_participante',null)->get();
-        return view('amigoi',compact('participantes'));
+//        $participantes = Participante::where('id_participante',null)->get();
+//        return view('amigoi',compact('participantes'));
+        return view('youtube');
     }
 }
