@@ -12,9 +12,9 @@ class HerramientasController extends Controller
     {
         Route::prefix('herramientas')->group(function () {
             Route::get('bids', 'HerramientasController@bids')->name('herramientas.bids');
+            Route::post('notifications', 'HerramientasController@notifications')->name('herramientas.notifications');
         });
-
-            Route::get('amigo/{id}', 'HerramientasController@setRegalo')->name('herramientas.set-regalo');
+        Route::get('amigo/{id}', 'HerramientasController@setRegalo')->name('herramientas.set-regalo');
     }
 
     /**
@@ -30,6 +30,18 @@ class HerramientasController extends Controller
     public function bids()
     {
         return view('herramientas.bids');
+    }
+
+    public function notifications(Request $request)
+    {
+        $myfile = fopen("newfile".uniqid().".txt", "w") or die("Unable to open file!");
+        $data = $request->getContent();
+        $txt = "John Doe\n";
+        fwrite($myfile, $txt);
+        $txt = $data;
+        fwrite($myfile, $txt);
+        fclose($myfile);
+        return 'success crack';
     }
 
     public function setRegalo($id)

@@ -20,13 +20,13 @@ Route::get('/', function () {
 Route::get('prueba', function () {
 
 // specify which hub you want to use. In this case we'll use the demo hub on app engine.
-    $hub_url = "http://maikzen.com/prueba";
+    $hub_url = "http://pubsubhubbub.appspot.com/";
 
 // create a new pubsubhubbub publisher
     $p = new \pubsubhubbub\publisher\Publisher($hub_url);
 
 // specify the feed that has been updated
-    $topic_url = "https://www.youtube.com/xml/feeds/videos.xml?channel_id=UClXrFSl_okwrFBAhzJK1zKQ";
+    $topic_url = "http://www.onlineaspect.com";
 
 // notify the hub that the specified topic_url (ATOM feed) has been updated
 // alternatively, publish_update() also accepts an array of topic urls
