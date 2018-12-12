@@ -15,7 +15,7 @@
 //home routes
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
-    return redirect(url('home'));
+    return view('twitter');
 });
 Route::get('prueba', function () {
     return view('twitter');
