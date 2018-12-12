@@ -398,8 +398,9 @@ $url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
 $getfield = '?screen_name="' . $user . '&count=' . $count;
 $requestMethod = 'GET';
 $twitter = new TwitterAPIExchange($settings);
-$json = $twitter->setGetfield($getfield)
-    ->buildOauth($url, $requestMethod)
-    ->performRequest();
+//$json = $twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest();
+$json = $twitter->buildOauth($url, $requestMethod)->setGetfields($getfield)->performRequest();
+
+
 
 var_dump($json);
