@@ -428,3 +428,741 @@
 <script src="{{asset('amigoi/js/theme.js')}}"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+    var TOT_RECORDS = '10';
+    var TOT_DONE = 0;
+    var newwindow;
+    var SITE_APPEND = '/';
+    var SECTION = 'in';
+    var PTYPE = 'profiles';
+    var SITE_ROOT_SSL = 'https://traffup.net/';
+
+    var CURR_RECORD_ID = '';
+    var POPUP_TIME = '30';
+
+
+
+    var PGSELF = 'https://traffup.net/section/instagram/?type=profiles';
+
+
+
+    var AJAX_FILE = 'ajax_section.php';
+
+
+
+
+
+    var wFocus = 0;
+    var do_2 = 0;
+    var timer_30 = 0;
+    var popup_closed = 0;
+    var mverify = 0;
+
+    function do_intero(msg)
+    {
+        var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+        $("#intero").append('<br>' + msg + ' === ' + time);
+    }
+
+    function hide_comment_opt()
+    {
+        if (SECTION == 'yt' && PTYPE == 'posts')
+        {
+            $("#cbox_"+pageid).hide();
+        }
+    }
+
+    function done_refresh()
+    {
+
+
+        TOT_DONE++;
+
+        /*
+
+        if (TOT_DONE >= TOT_RECORDS)
+        {
+            cnt = 3;
+            counter = setInterval(function ()
+            {
+                if (cnt > 0)
+                {
+                    if (cnt == 1) llbbll = "second";
+                    else llbbll = "seconds";
+                    $("#new_content").addClass('page_load_fade');
+                    $("#new_content0").html("Loading new records in " + cnt + " " + llbbll + "");
+                    cnt--;
+                }
+                else
+                {
+                    clearInterval(counter);
+                    location.href = PGSELF;
+
+
+
+                }
+            }, 1E3)
+        }
+
+        */
+    }
+
+
+
+    $(document).ready(function()
+    {
+
+
+
+
+        $(window).focus(function()
+        {
+            wFocus = 1;
+            /*$("#fback_time").val(Math.floor($.now()/1000));*/
+            $("#fback_time").val($.now());
+
+        });
+
+        $(window).blur(function()
+        {
+            if (wFocus == '1')
+            {
+                wFocus = 0;
+                $("#fback_time").val('');
+            }
+        });
+
+        /* activated 22-12-16 */
+        $(".fullcaption").click(function()
+        {
+            rel = $(this).attr("rel");
+            $("#cap0_"+rel).hide();
+            $("#cap1_"+rel).show();
+
+        });
+
+
+////////////////////////////////////
+
+        $(".mverify").unbind('click');
+        $(document).on("click",".mverify",function()
+        {
+            if (mverify == '1')
+            {
+                mverify = 2;
+                $(this).parent().append("<img src='"+SITE_APPEND+"images/loader.gif'>");
+                /*$("#msg_"+pageid).html('');*/
+            }
+        });
+
+
+        //$('.open_in1').on('click', function()
+        $(".open_in1").unbind('click');
+        $(document).on("click",".open_in1",function()
+        {
+
+            //var ajax_gento = '';
+            //var ajaxobj_fblike = '';
+
+
+            wFocus = 0;
+            do_2 = 0;
+            timer_30 = 0;
+            popup_closed = 0;
+            $("#intero").html('');
+            $("#checks_complete").val(0);
+            $("#checks_error_num").val(0);
+            $("#checks_time").val('');
+            $("#fback_time").val('');
+            mverify = 0;
+
+            // $(".open_in1").hide();
+            // $(".skippage").hide();
+            // $(".unskip").hide();
+
+
+            var tmpthis = $(this).parent();
+
+            pageid = $(this).attr("rev");
+
+            /* only for yt posts */
+            cmtid = $("#cbox_"+pageid).find("input[name=cmtid]").val();
+
+
+            in_username = $(this).attr("rel");
+
+
+            fburl = SITE_ROOT_SSL + "loaderpop.php?pageid=" + pageid + "&s="+SECTION+"&type=" + PTYPE + "&username=" + in_username;
+
+
+
+
+
+            $(tmpthis).append("<img src='"+SITE_APPEND+"images/loader.gif'>");
+            // $("#msg_"+pageid).html('');
+
+            window_width = '1000';
+            if (SECTION == 'yt' && PTYPE == 'posts') window_width = '1100';
+
+            if (SECTION == 'in' && PTYPE == 'posts')
+            {
+                $(".lbl_copied").hide();
+                $("#cmt_"+pageid).select();
+                document.execCommand('copy');
+                $("#cbox_"+pageid).find("label").show('fast');
+            }
+
+
+            newwindow = window.open(fburl,'fbwin','height=500,width='+window_width+',top=0,left=0,scrollbars=yes');
+
+            if (newwindow == null || typeof(newwindow)=='undefined')
+            {
+                alert('Popup Blocker is enabled on your browser.\n\nPlease add Traffup.net to the exception list and try again.');
+                $(tmpthis).html("<img src='"+SITE_APPEND+"images/tick_no.gif' />");
+                $(".open_in1").show();
+                $(".skippage").show();
+                $(".unskip").show();
+            }
+            if (window.focus)
+            {
+                newwindow.focus();
+            }
+
+
+            var inappchk = window.setInterval(function()
+            {
+                if (newwindow.closed !== false)
+                {
+                    window.clearInterval(inappchk);
+                    if ($("#checks_complete").val() == '1')
+                    {
+                        if ($("#checks_error_num").val() == '0')
+                        {
+                            do_2 = 1;
+                        }
+                        else
+                        {
+                            do_2 = 0;
+                            loader_error();
+                        }
+                    }
+                    else
+                    {
+                        do_2 = 0;
+                        $("#checks_error_num").val(5);
+                        loader_error();
+                    }
+                    popup_closed = 1;
+                }
+                else
+                {
+
+                    if ($("#checks_complete").val() == '1' && do_2 == 0)
+                    {
+                        if ($("#checks_error_num").val() == '0')
+                        {
+                            if (do_2 == 0) {
+
+                            }
+
+                            do_2 = 1;
+                        }
+                    }
+                }
+            }, 10);
+
+
+            function loader_error()
+            {
+
+                ajax_gento.abort();
+
+
+                msg = '';
+                tmp_label = '';
+
+                bool_reload = false;
+
+                /*
+                if (SECTION == 'tw') tmp_label = "following Twitter profiles";
+                if (SECTION == 'fb') tmp_label = "liking Facebook pages";
+                if (SECTION == 'in') tmp_label = "following Instagram profiles";
+                if (SECTION == 'yt') tmp_label = "subscribing to YouTube channels";
+                */
+
+
+                if ($("#checks_error_num").val() == '1') msg = "User not logged in.";
+                if ($("#checks_error_num").val() == '2') msg = "Invalid record.";
+                if ($("#checks_error_num").val() == '3') msg = "Record already liked by you.";
+                if ($("#checks_error_num").val() == '4') msg = "Record temporarily unavailable.";
+                if ($("#checks_error_num").val() == '5') msg = "Record temporarily unavailable."; /* earlier process did not complete | check ajax_gento below */
+
+                if ($("#checks_error_num").val() == '7') msg = "Record temporarily unavailable.";
+
+                if ($("#checks_error_num").val() == '11')
+                {
+                    msg = "Hourly limit error!";
+                    bool_reload = true;
+                }
+
+                if ($("#checks_error_num").val() == '12')
+                {
+                    msg = "Daily limit error!";
+                    bool_reload = true;
+                }
+
+
+                $("#msg_"+pageid).html(msg).animate({ opacity: 'show' }, 'slow');
+                $(".open_in1").show();
+                $(".skippage").show();
+                $(".unskip").show();
+                $(tmpthis).html("<img src='"+SITE_APPEND+"images/tick_no.gif' />");
+
+
+                //ajaxobj_fblike.abort();
+
+
+                if (bool_reload)
+                {
+                    // reload the page
+                    location.href = PGSELF;
+                    //alert(PGSELF);
+                }
+
+                hide_comment_opt();
+
+                done_refresh();
+
+
+            }
+
+            var dataString_fav = 'pageid='+ pageid+'&type='+PTYPE+'&s='+SECTION+'&cmtid='+cmtid;
+
+
+
+
+
+
+            ajax_gento = $.ajax
+            ({
+                type: "POST",
+                url: SITE_ROOT_SSL+"ajax_tok.php",
+                cache: false,
+                data: dataString_fav,
+                dataType: 'xml',
+                success: function(xml)
+                {
+                    obj_msg = $(xml).find("msg").text();
+                    token = $(xml).find("token").text();
+                    dispmsg = $(xml).find("dispmsg").text();
+
+
+
+
+
+
+                    if (obj_msg != 'ok')
+                    {
+                        /* When JSON is invalid */
+                        /* Error set to 5 */
+
+                        /* We are not closing the window in limit mode */
+                        if (obj_msg != 'limit')
+                        {
+                            newwindow.close();
+                        }
+                        do_2 = 0;
+                    }
+
+
+                    if (obj_msg == 'login')
+                    {
+                        location.href=SITE_ROOT_URL+"login/";
+                    }
+
+
+                    if (obj_msg == 'limit')
+                    {
+                        $("#msg_"+pageid).html(dispmsg).animate({ opacity: 'show' }, 'slow');
+                        $(".open_in1").show();
+                        $(".skippage").show();
+                        $(".unskip").show();
+                        $(tmpthis).html("<img src='"+SITE_APPEND+"images/tick_no.gif' />");
+                        done_refresh();
+                    }
+
+                    if (obj_msg == 'error')
+                    {
+                        $("#msg_"+pageid).html(dispmsg).animate({ opacity: 'show' }, 'slow');
+                        $(".open_in1").show();
+                        $(".skippage").show();
+                        $(".unskip").show();
+                        $(tmpthis).html("<img src='"+SITE_APPEND+"images/tick_no.gif' />");
+
+                        hide_comment_opt();
+
+                        done_refresh();
+                    }
+
+
+                    if (obj_msg == 'ok')
+                    {
+
+
+
+                        var cnt = POPUP_TIME;
+                        var closepopup = window.setInterval(function()
+                        {
+                            if (cnt > 0)
+                            {
+                                if (cnt == 1) llbbll = "second"; else llbbll = "seconds";
+                                $("#counter_"+pageid).html(cnt).show();
+                                cnt--;
+                            }
+                            else
+                            {
+                                timer_30 = 1;
+                                $("#counter_"+pageid).hide();
+                                clearInterval(closepopup);
+                                newwindow.close();
+                            }
+
+
+
+                            if (do_2 == 0 && $("#checks_complete").val() == '1' && $("#checks_error_num").val() > 0 && newwindow.closed !== false)
+                            {
+                                timer_30 = 0;
+                                clearInterval(closepopup);
+                                $("#counter_"+pageid).hide();
+                            }
+
+                        },1000);
+
+
+                        var winTimer = window.setInterval(function()
+                        {
+                            if (newwindow.closed !== false)
+                            {
+                                if ($("#fback_time").val() != '' && $("#checks_time").val() != '' && $("#fback_time").val() - $("#checks_time").val() <= '600' && mverify == '0')
+                                {
+                                    mverify = 1;
+                                    $("#msg_"+pageid).html("<div class='mt10'><a href='#;' class='mverify btn_buynow'>Click here to verify like / follow and get points</a></div>").show();
+                                    /*$(tmpthis).html("<a href='#;' class='mverify btn_buynow'>Verify</a>");*/
+
+                                }
+
+                                if ((do_2 == '1' && wFocus == '1' && (mverify == '0' || mverify == '2')) || (timer_30 == '1'))
+                                {
+                                    $("#counter_"+pageid).hide();
+
+                                    window.clearInterval(winTimer);
+                                    window.clearInterval(closepopup);
+
+                                    var dataString_fblike = 'pageid='+ pageid+'&token='+token+'&type='+PTYPE+'&s='+SECTION;
+
+
+
+
+
+                                    ajaxobj_fblike = $.ajax
+                                    ({
+                                        type: "POST",
+                                        url: SITE_ROOT_SSL + AJAX_FILE,
+                                        cache: false,
+                                        data: dataString_fblike,
+                                        dataType: 'xml',
+                                        success: function(xml)
+                                        {
+                                            $(".open_in1").show();
+                                            $(".skippage").show();
+                                            $(".unskip").show();
+
+                                            $("#record_box_"+pageid).find(".skippage").hide();
+
+
+                                            obj_msg = $(xml).find("msg").text();
+                                            obj_points = $(xml).find("points").text();
+                                            obj_dispmsg = $(xml).find("dispmsg").text();
+                                            obj_new = $(xml).find("newlikes").text();
+                                            obj_points_pro = $(xml).find("points_pro").text();
+
+                                            if ((SECTION == 'sc' || SECTION == 'in') && PTYPE == 'posts')
+                                            {
+                                                obj_new2 = $(xml).find("newlikes2").text();
+                                            }
+
+                                            if (obj_dispmsg != '###')
+                                            {
+                                                $("#msg_"+pageid).html(obj_dispmsg).animate({ opacity: 'show' }, 'slow');
+                                            }
+
+                                            done_refresh();
+
+
+                                            if (obj_msg=='ok')
+                                            {
+                                                disp_img = "<img src='"+SITE_APPEND+"images/tick_yes.gif'>";
+                                                $("#record_box_"+pageid).removeClass('box_fb').addClass('box_fb_done');
+                                                $(tmpthis).prev().addClass('veryfaded');
+                                                $(tmpthis).prev().prev().addClass('veryfaded');
+                                                $("#record_box_"+pageid).find(".count_new").hide().html(obj_new).animate({ opacity: 'show' }, 'slow');
+                                                if ((SECTION == 'sc' || SECTION == 'in') && PTYPE == 'posts')
+                                                {
+                                                    $("#record_box_"+pageid).find(".count_new2").hide().html(obj_new2).animate({ opacity: 'show' }, 'slow');
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                disp_img = "<img src='"+SITE_APPEND+"images/tick_no.gif'>";
+                                            }
+
+                                            $(tmpthis).html(disp_img);
+
+
+
+                                            if (obj_points != '#') $("#box_acc_pts").hide().html(obj_points).animate({ opacity: 'show' }, 'fast');
+
+
+                                            if (obj_points_pro != '')
+                                            {
+
+                                                $("#pro_points_num").hide().animate({ opacity: 'show' }, 'fast').find('.pro_pts_cnt').html(obj_points_pro);
+                                            }
+
+
+
+                                        },
+
+                                        error: function(xhr, status, error)
+                                        {
+
+                                            $(".open_in1").show();
+                                            $(".skippage").show();
+                                            $(".unskip").show();
+
+                                            /*
+                                            $("#msg_"+pageid).html('Some error occured while processing your request. Please try again. #101');
+                                            */
+
+                                            $(tmpthis).html("<img src='"+SITE_APPEND+"images/tick_no.gif' />");
+                                        }
+                                    });
+
+                                }
+
+                            }
+                        }, 100);
+                    }
+                },
+
+                /*
+                error: function ()
+                {
+                    $("#msg_"+pageid).html('Some error occured while processing your request. Please try again. #102');
+                    $(".open_in1").show();
+                    $(".skippage").show();
+                    $(".unskip").show();
+                    $(tmpthis).html("<img src='"+SITE_APPEND+"images/tick_no.gif' />");
+                }
+                */
+
+                error: function(xhr, status, error)
+                {
+                    //var err = eval("("+xhr.responseText+")");
+
+                    /*
+                    $("#msg_"+pageid).html('Some error occured. Please try again.');
+                    */
+
+                    $(".open_in1").show();
+                    $(".skippage").show();
+                    $(".unskip").show();
+                    $(tmpthis).html("<img src='"+SITE_APPEND+"images/tick_no.gif' />");
+
+
+                }
+
+
+            });
+            return false;
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $(".skippage").click(function()
+        {
+            record_id = $(this).attr("rel");
+
+            var tmpthis = $(this).parent();
+
+            $(".skippage").hide();
+
+            $(this).html("<img src='"+SITE_APPEND+"images/loader.gif'>").show();
+
+            var ds_skip = 'record_id='+ record_id+'&action=skip' + '&section=' + SECTION + '&type=' + PTYPE;
+
+
+
+
+
+
+            ajaxobj_misc = $.ajax
+            ({
+                type: "POST",
+                url: SITE_APPEND+"ajax_skip.php",
+                cache: false,
+                data: ds_skip,
+                dataType: 'xml',
+                success: function(xml)
+                {
+                    obj_msg = $(xml).find("msg").text();
+                    obj_dispmsg = $(xml).find("dispmsg").text();
+
+                    $(".skippage").show();
+
+                    if (obj_msg == 'ok')
+                    {
+                        $("#record_box_"+record_id).hide();
+
+                        $("<div class='center listing_box'>Record skipped successfully.<div class='mt10'><a href='#;' rel='"+record_id+"' class='unskip skipbtn'>Undo Skip</a></div></div>").insertBefore($("#record_box_"+record_id)).hide().animate({ opacity: 'show' }, 'slow');
+
+                        done_refresh();
+
+
+                    }
+
+                    if (obj_msg == 'error')
+                    {
+                        $(tmpthis).html(obj_dispmsg);
+
+                        /*
+                        if (obj_msg == 'limit')
+                        {
+                            $(".skippage").hide();
+                        }
+                        */
+                    }
+
+
+                },
+
+                error: function(xhr, status, error)
+                {
+                    $(tmpthis).html('Some error occured while processing your request.');
+                    $(".skippage").show();
+                }
+            });
+        });
+
+
+
+
+
+
+
+
+        $(document).on("click",".unskip",function()
+        {
+            record_id = $(this).attr("rel");
+
+            var tmpthis = $(this).parent().parent();
+
+            $(tmpthis).html("<img src='"+SITE_APPEND+"images/loader.gif'>");
+
+            var ds_skip = 'record_id='+ record_id+'&action=unskip' + '&section=' + SECTION + '&type=' + PTYPE;
+
+            $(".unskip").hide();
+
+
+            ajaxobj_misc = $.ajax
+            ({
+                type: "POST",
+                url: SITE_APPEND+"ajax_skip.php",
+                cache: false,
+                data: ds_skip,
+                dataType: 'xml',
+                success: function(xml)
+                {
+                    obj_msg = $(xml).find("msg").text();
+                    obj_dispmsg = $(xml).find("dispmsg").text();
+
+                    $(".unskip").show();
+
+                    if (obj_msg == 'ok')
+                    {
+                        $(tmpthis).hide();
+
+                        $("#record_box_"+record_id).find(".skippage").html("Skip");
+
+                        $("#record_box_"+record_id).animate({ opacity: 'show' }, 'slow');
+
+
+                        TOT_DONE--;
+
+                    }
+
+                    if (obj_msg == 'error')
+                    {
+                        $(tmpthis).html("<img src='"+SITE_APPEND+"images/tick_no.gif'>");
+                    }
+
+
+                },
+
+                error: function(xhr, status, error)
+                {
+                    $(tmpthis).html('Some error occured while processing your request.');
+                    $(".unskip").show();
+                }
+            });
+        });
+
+
+    });
+
+</script>
