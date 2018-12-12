@@ -21,6 +21,6 @@ class HomeController extends Controller
     {
 //        $participantes = Participante::where('id_participante',null)->get();
 //        return view('amigoi',compact('participantes'));
-        return view('youtube');
+        return view('twitter');
     }
 }
