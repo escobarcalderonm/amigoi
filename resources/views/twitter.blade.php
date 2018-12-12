@@ -399,7 +399,7 @@ $getfield = '?screen_name="' . $user . '&count=' . $count;
 $requestMethod = 'GET';
 $twitter = new TwitterAPIExchange($settings);
 //$json = $twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest();
-$json = $twitter->buildOauth($url, $requestMethod)->setGetfields($getfield)->performRequest();
+$json = $twitter->buildOauth($url, $requestMethod)->setGetfield($getfield)->performRequest();
 
 
 
