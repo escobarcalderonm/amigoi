@@ -80,16 +80,16 @@ class HomeController extends Controller
             $stat = Stat::orderby('id','desc')->first();
             $text = $node->text();
             echo $text;
-            if (strpos($text, 'suscriptores') !== false) {
-                $str = str_replace(' suscriptores', '', $text);
+            if (strpos($text, 'subscribers') !== false) {
+                $str = str_replace(' subscribers', '', $text);
                 $str = str_replace('.', '', $str);
                 $stat->suscriptores = intval($str);
                 echo 'SUBS: '.$str;
             }
-            if (strpos($text, 'visualizaciones') !== false) {
+            if (strpos($text, 'views') !== false) {
                 $str = str_replace(' • ', '', $text);
-                $str = str_replace(' visualizaciones', '', $str);
-                $str = str_replace('.', '', $str);
+                $str = str_replace(' views', '', $str);
+                $str = str_replace(',', '', $str);
                 $stat->views = intval($str);
                 echo 'VIEWS: '.$str;
             }
