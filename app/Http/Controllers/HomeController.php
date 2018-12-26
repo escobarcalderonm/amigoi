@@ -79,6 +79,7 @@ class HomeController extends Controller
         $collection->each(function ($node) {
             $stat = Stat::orderby('id','desc')->first();
             $text = $node->text();
+            echo $text;
             if (strpos($text, 'suscriptores') !== false) {
                 $str = str_replace(' suscriptores', '', $text);
                 $str = str_replace('.', '', $str);
