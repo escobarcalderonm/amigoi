@@ -17,6 +17,7 @@ class Stat extends Model
      */
     protected $fillable = [
         'suscriptores',
-        'views'
+        'views',
+        'notify'
     ];
 }

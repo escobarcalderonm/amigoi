@@ -71,6 +71,8 @@ class HomeController extends Controller
         $crawler = GoutteFacade::request('GET', 'https://www.youtube.com/channel/UClXrFSl_okwrFBAhzJK1zKQ/about');
         $collection = $crawler->filter('.about-stat');
 
+        $penStat = Stat::orderby('id','desc')->first();
+
         $stat = new Stat();
         $stat->suscriptores = 0;
         $stat->views = 0;
@@ -82,7 +84,7 @@ class HomeController extends Controller
             echo $text;
             if (strpos($text, 'subscribers') !== false) {
                 $str = str_replace(' subscribers', '', $text);
-                $str = str_replace('.', '', $str);
+                $str = str_replace(',', '', $str);
                 $stat->suscriptores = intval($str);
                 echo 'SUBS: '.$str;
             }
@@ -98,7 +100,20 @@ class HomeController extends Controller
         });
 
         $stat = Stat::orderby('id','desc')->first();
+        $lastnotify = Stat::orderby('id','desc')->where('notify',1)->first();
 
-        self::sendNotify("Youtube",$stat->suscriptores . " subs y " . $stat->views . ' views');
-    }
+        if($penStat->suscriptores < $stat->suscriptores){
+            self::sendNotify("NUEVO SUSCRIPTOR",$stat->suscriptores . " subs");
+        }
+
+        if($lastnotify == null){
+            $stat->notify = 1;
+            $stat->update();
+            self::sendNotify("Youtube",$stat->suscriptores . " subs y " . $stat->views . ' views');
+        }elseif($lastnotify->views + 9 < $stat->views){
+                $stat->notify = 1;
+                $stat->update();
+                self::sendNotify("NUEVOS VIEWS",$stat->views . ' views');
+            }
+        }
 }
