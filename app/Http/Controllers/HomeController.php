@@ -28,7 +28,7 @@ class HomeController extends Controller
     public function index()
     {
 //        ewuxPYvjdH8:APA91bHYeMBxaqOO6TkiWozmpqjpiujTLym5wtk74l-5il-d-IwNInOHt13PWCyEQSYJUmDA9m_OtmJf_rgx9uqs6VvR-7RUYhEgh4HpIGZH6K0kmVb5u3DMfhPeGdZHBYyZ0qf_g0qV
-        self::updateYT();
+//        self::updateYT();
     }
 
     public static function sendNotify($title,$msn){
@@ -46,7 +46,7 @@ class HomeController extends Controller
         $notification = $notificationBuilder->build();
         $data = $dataBuilder->build();
 
-        $token = "ewuxPYvjdH8:APA91bHYeMBxaqOO6TkiWozmpqjpiujTLym5wtk74l-5il-d-IwNInOHt13PWCyEQSYJUmDA9m_OtmJf_rgx9uqs6VvR-7RUYhEgh4HpIGZH6K0kmVb5u3DMfhPeGdZHBYyZ0qf_g0qV";
+        $token = env("token_device");
 
         $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
 
