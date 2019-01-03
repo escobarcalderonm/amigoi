@@ -48,8 +48,6 @@ class HomeController extends Controller
 
         $token = env("token_device");
 
-        dd($token);
-
         $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
 
         $downstreamResponse->numberSuccess();
