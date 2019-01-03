@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Stat;
 use Illuminate\Http\Request;
 use App\Participante;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use LaravelFCM\Facades\FCM;
 use LaravelFCM\Message\OptionsBuilder;
@@ -29,6 +30,24 @@ class HomeController extends Controller
     {
 //        ewuxPYvjdH8:APA91bHYeMBxaqOO6TkiWozmpqjpiujTLym5wtk74l-5il-d-IwNInOHt13PWCyEQSYJUmDA9m_OtmJf_rgx9uqs6VvR-7RUYhEgh4HpIGZH6K0kmVb5u3DMfhPeGdZHBYyZ0qf_g0qV
 //        self::updateYT();
+    }
+
+    public static function updateForo(){
+        $crawler = GoutteFacade::request('GET', 'https://www.3djuegos.com/foro-de/123160/0/red-dead-online');
+        $collection = $crawler->filter('.mar_b3');
+
+        $collection->each(function ($node) {
+            $last = '';
+            foreach(file('last.txt') as $line) {
+                $last = $line;
+            }
+            $text = $node->text();
+            $title = explode(": ", $text)[1];
+            if($title != $last){
+                HomeController::sendNotify('Nuevo tema:',$title);
+                File::put('last.txt', $title);
+            }
+        });
     }
 
     public static function sendNotify($title,$msn){

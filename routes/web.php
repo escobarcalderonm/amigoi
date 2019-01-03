@@ -11,18 +11,21 @@
 |
 */
 
-
 //home routes
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
     return redirect('/home');
 });
 Route::get('stats', function () {
-    $var = \App\Stat::orderby('id','desc')->limit(24)->get();
+    $var = \App\Stat::orderby('id', 'desc')->limit(24)->get();
     return $var->toJson();
 });
 Route::get('notify', function () {
-    \App\Http\Controllers\HomeController::sendNotify("Titulo",'mensaje');
+    \App\Http\Controllers\HomeController::sendNotify("Titulo", 'mensaje');
+});
+
+Route::get('prueba', function () {
+
 });
 
 //Auth routes
