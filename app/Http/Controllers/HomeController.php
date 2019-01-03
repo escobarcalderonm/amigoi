@@ -78,6 +78,8 @@ class HomeController extends Controller
         $stat->views = 0;
         $stat->save();
 
+        $diff = 99;
+
         $collection->each(function ($node) {
             $stat = Stat::orderby('id','desc')->first();
             $text = $node->text();
@@ -110,7 +112,7 @@ class HomeController extends Controller
             $stat->notify = 1;
             $stat->update();
             self::sendNotify("Youtube",$stat->suscriptores . " subs y " . $stat->views . ' views');
-        }elseif($lastnotify->views + 9 < $stat->views){
+        }elseif($lastnotify->views + $diff < $stat->views){
                 $stat->notify = 1;
                 $stat->update();
                 self::sendNotify("NUEVOS VIEWS",$stat->views . ' views');
