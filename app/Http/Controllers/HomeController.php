@@ -32,27 +32,29 @@ class HomeController extends Controller
 //        self::updateYT();
     }
 
-    public static function updateForo(){
+    public static function updateForo()
+    {
         $crawler = GoutteFacade::request('GET', 'https://www.3djuegos.com/foro-de/123160/0/red-dead-online');
         $collection = $crawler->filter('.mar_b3');
 
         $collection->each(function ($node) {
             $last = '';
-            foreach(file('last.txt') as $line) {
+            foreach (file('last.txt') as $line) {
                 $last = $line;
             }
             $text = $node->text();
             $title = explode(": ", $text)[1];
-            if($title != $last){
-                HomeController::sendNotify('Nuevo tema:',$title);
+            if ($title != $last) {
+                HomeController::sendNotify('Nuevo tema:', $title);
                 File::put('last.txt', $title);
             }
         });
     }
 
-    public static function sendNotify($title,$msn){
+    public static function sendNotify($title, $msn)
+    {
         $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60*20);
+        $optionBuilder->setTimeToLive(60 * 20);
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
         $notificationBuilder->setBody($msn)
@@ -90,51 +92,53 @@ class HomeController extends Controller
         $crawler = GoutteFacade::request('GET', 'https://www.youtube.com/channel/UClXrFSl_okwrFBAhzJK1zKQ/about');
         $collection = $crawler->filter('.about-stat');
 
-        $penStat = Stat::orderby('id','desc')->first();
+        $penStat = Stat::orderby('id', 'desc')->first();
 
         $stat = new Stat();
         $stat->suscriptores = 0;
         $stat->views = 0;
         $stat->save();
 
-        $diff = 99;
+        $diffViews = 999;
+        $diffSubs = 49;
 
         $collection->each(function ($node) {
-            $stat = Stat::orderby('id','desc')->first();
+            $stat = Stat::orderby('id', 'desc')->first();
             $text = $node->text();
             echo $text;
             if (strpos($text, 'subscribers') !== false) {
                 $str = str_replace(' subscribers', '', $text);
                 $str = str_replace(',', '', $str);
                 $stat->suscriptores = intval($str);
-                echo 'SUBS: '.$str;
+                echo 'SUBS: ' . $str;
             }
             if (strpos($text, 'views') !== false) {
                 $str = str_replace(' • ', '', $text);
                 $str = str_replace(' views', '', $str);
                 $str = str_replace(',', '', $str);
                 $stat->views = intval($str);
-                echo 'VIEWS: '.$str;
+                echo 'VIEWS: ' . $str;
             }
 
             $stat->update();
         });
 
-        $stat = Stat::orderby('id','desc')->first();
-        $lastnotify = Stat::orderby('id','desc')->where('notify',1)->first();
+        $stat = Stat::orderby('id', 'desc')->first();
+        $lastnotify = Stat::orderby('id', 'desc')->where('notify', 1)->first();
 
-        if($penStat->suscriptores < $stat->suscriptores){
-            self::sendNotify("NUEVO SUSCRIPTOR",$stat->suscriptores . " subs");
+        if ($penStat->suscriptores + $diffSubs < $stat->suscriptores) {
+            self::sendNotify("NUEVOS SUBS", $stat->suscriptores . " subs");
         }
 
-        if($lastnotify == null){
+        if ($lastnotify == null) {
             $stat->notify = 1;
             $stat->update();
-            self::sendNotify("Youtube",$stat->suscriptores . " subs y " . $stat->views . ' views');
-        }elseif($lastnotify->views + $diff < $stat->views){
-                $stat->notify = 1;
-                $stat->update();
-                self::sendNotify("NUEVOS VIEWS",$stat->views . ' views');
-            }
+            self::sendNotify("Youtube", $stat->suscriptores . " subs y " . $stat->views . ' views');
+        } elseif ($lastnotify->views + $diffViews < $stat->views) {
+            $stat->notify = 1;
+            $stat->update();
+            self::sendNotify("NUEVOS VIEWS", $stat->views . ' views');
         }
+    }
 }
+
